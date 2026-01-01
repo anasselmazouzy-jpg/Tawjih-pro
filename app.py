@@ -1,97 +1,107 @@
 import streamlit as st
-import random
 
-# 1. إعدادات التصميم والألوان (سماوي، أبيض، أخضر)
-st.set_page_config(page_title="منصة توجيه برو الشاملة", layout="wide")
+# 1. إعدادات الصفحة
+st.set_page_config(page_title="Tawjih Pro | Anas El Mazouri", layout="wide")
 
+# 2. تصميم CSS احترافي (ألوان السماء والأبيض والأخضر)
 st.markdown("""
     <style>
-    .main { background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 50%, #e8f5e9 100%); }
-    h1 { color: #1565c0; text-align: center; font-family: 'Cairo', sans-serif; border-bottom: 3px solid #4caf50; padding-bottom: 10px; }
-    .stTabs [data-baseweb="tab-list"] { gap: 10px; justify-content: center; }
-    .stTabs [data-baseweb="tab"] { background-color: #ffffff; border-radius: 10px 10px 0 0; padding: 10px 20px; color: #1565c0; font-weight: bold; }
-    .stTabs [aria-selected="true"] { background-color: #4caf50 !important; color: white !important; }
-    .exam-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-right: 8px solid #4caf50; margin-bottom: 15px; text-align: right; }
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+    html, body, [class*="st-"] { font-family: 'Cairo', sans-serif; text-align: right; }
+    
+    .stApp {
+        background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 50%, #e8f5e9 100%);
+    }
+    
+    .exam-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-right: 6px solid #2e7d32;
+        margin-bottom: 15px;
+    }
+
+    .download-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #2ecc71;
+        color: white !important;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    .download-btn:hover { background-color: #27ae60; transform: scale(1.05); }
+
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #1a5276;
+        color: white;
+        text-align: center;
+        padding: 8px;
+        font-size: 14px;
+        z-index: 100;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🎓 منصة توجيه برو: رفيقك من 2008 إلى النجاح")
+# 3. شريط العنوان
+st.markdown("<h1 style='text-align:center; color:#1a5276;'>🎓 منصة أناس المعزوري للتوجيه</h1>", unsafe_allow_html=True)
 
-# 2. نظام الأقسام (Tabs) لضمان ظهور كل شيء
-tab1, tab2, tab3 = st.tabs(["📚 بنك الامتحانات (2008-2024)", "🤖 الموجه الذكي (AI)", "🎯 أين سأدرس؟ (حساب النقاط)"])
+# 4. الأقسام
+tab1, tab2, tab3 = st.tabs(["📚 تحميل الامتحانات (روابط حقيقية)", "🎯 محرك النقاط", "🤖 المساعد الذكي"])
 
-# --- القسم الأول: الامتحانات ---
 with tab1:
-    st.header("أرشيف الامتحانات الوطنية لجميع المسالك")
-    st.image("https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800", caption="استعد للامتحان الوطني")
+    st.header("تحميل الامتحانات الوطنية (2008-2024)")
+    st.image("https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800", caption="الاستعداد هو مفتاح النجاح")
     
-    col_a, col_b = st.columns(2)
-    with col_a:
-        shoba = st.selectbox("اختر الشعبة:", ["علوم الحياة والأرض", "العلوم الفيزيائية", "الآداب", "العلوم الإنسانية"])
-    with col_b:
-        sana = st.selectbox("اختر السنة:", list(range(2024, 2007, -1)))
+    col1, col2 = st.columns(2)
+    with col1:
+        shoba = st.selectbox("اختر المسلك:", ["علوم الحياة والأرض", "العلوم الفيزيائية", "الآداب", "العلوم الرياضية"])
+    with col2:
+        year = st.selectbox("اختر السنة:", list(range(2024, 2007, -1)))
 
-    st.info(f"عرض امتحانات {shoba} لعام {sana}")
+    st.write(f"### امتحانات {shoba} لعام {year}")
     
-    # قائمة الامتحانات الحقيقية
-    exams = ["الرياضيات", "الفيزياء الكيمياء", "علوم الحياة والأرض", "الفلسفة", "اللغة الإنجليزية"]
-    for ex in exams:
-        with st.container():
-            st.markdown(f"""
-            <div class="exam-card">
-                <h4>📄 امتحان مادة {ex}</h4>
-                <p>يشمل موضوع الامتحان + عناصر الإجابة الرسمية</p>
+    # مصفوفة تحاكي المواد مع روابط حقيقية (كمثال)
+    # ملاحظة: يمكنك تغيير الروابط بروابط مباشرة من موقع moutamadris أو وزارة التربية
+    materials = [
+        {"name": "مادة الرياضيات", "link": "https://www.google.com/search?q=site:moutamadris.ma+امتحان+الرياضيات+" + str(year)},
+        {"name": "مادة الفيزياء", "link": "https://www.google.com/search?q=site:moutamadris.ma+امتحان+الفيزياء+" + str(year)},
+        {"name": "مادة الفلسفة", "link": "https://www.google.com/search?q=site:moutamadris.ma+امتحان+الفلسفة+" + str(year)}
+    ]
+
+    for mat in materials:
+        st.markdown(f"""
+        <div class="exam-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <a href="{mat['link']}" target="_blank" class="download-btn">اضغط هنا للتحميل (PDF)</a>
+                <h4 style="margin:0;">{mat['name']}</h4>
             </div>
-            """, unsafe_allow_html=True)
-            st.download_button(label=f"تحميل PDF - {ex}", data="File Content", file_name=f"{ex}_{sana}.pdf")
+        </div>
+        """, unsafe_allow_html=True)
 
-# --- القسم الثاني: البوت الذكي ---
 with tab2:
-    st.header("🤖 اسأل بوت توجيه برو")
-    st.write("أنا مساعدك الذكي، يمكنني مساعدتك في اختيار الشعبة أو البحث عن دروس.")
-    
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+    st.header("حلل نقاطك مع أناس المعزوري")
+    st.image("https://images.unsplash.com/photo-1541339907198-e08759df9a73?w=800")
+    avg = st.number_input("أدخل معدلك العام المتوقع:", 10.0, 20.0, 14.0)
+    if st.button("تحليل المسار الدراسى"):
+        if avg >= 16: st.success("وجهتك: الطب أو الهندسة.")
+        elif avg >= 13: st.info("وجهتك: ENCG أو FST.")
+        else: st.warning("وجهتك: الكليات أو التكوين المهني.")
 
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-
-    if prompt := st.chat_input("كيف يمكنني مساعدك اليوم؟"):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        with st.chat_message("assistant"):
-            responses = [
-                f"سؤالك عن '{prompt}' ممتاز! بالنسبة لهذه الشعبة، آفاقها كبيرة في سوق الشغل المغربي.",
-                "أنصحك بالتركيز على المواد ذات المعامل المرتفع لضمان ميزة الانتقاء.",
-                "هل تبحث عن امتحانات قديمة لهذه المادة؟ يمكنك العودة لقسم الامتحانات."
-            ]
-            response = random.choice(responses)
-            st.markdown(response)
-            st.session_state.messages.append({"role": "assistant", "content": response})
-
-# --- القسم الثالث: محرك النقاط ---
 with tab3:
-    st.header("🎯 حلل نقاطك واعرف مستقبلك")
-    st.image("https://images.unsplash.com/photo-1523050337458-5bd834714f56?w=800", caption="خطط لمسارك الجامعي")
-    
-    st.write("أدخل نقاطك المتوقعة لنقترح عليك المدارس المناسبة في المغرب:")
-    
-    c1, c2 = st.columns(2)
-    with c1:
-        math = st.number_input("نقطة الرياضيات", 0, 20, 12)
-        pc = st.number_input("نقطة الفيزياء", 0, 20, 12)
-    with c2:
-        eng = st.number_input("نقطة الإنجليزية", 0, 20, 12)
-        total = st.number_input("المعدل العام", 0.0, 20.0, 13.0)
+    st.header("الموجه الآلي الذكي")
+    st.chat_message("assistant").write("أهلاً بك! أنا مساعد أناس المعزوري، كيف أساعدك اليوم؟")
+    st.chat_input("اسألني عن أي شعبة...")
 
-    if st.button("تحليل مستقبلي الآن"):
-        st.balloons()
-        if total >= 16:
-            st.success("✅ أنت مؤهل للمدارس الكبرى: الطب، الهندسة (ENSA)، والأقسام التحضيرية.")
-        elif total >= 14:
-            st.info("✅ خياراتك ممتازة: مدارس التجارة (ENCG)، التمريض (ISPITS)، والعلوم والتقنيات (FST).")
-        else:
-            st.warning("✅ خياراتك المتاحة: المدارس التكنولوجية (EST)، شهادة التقني العالي (BTS)، والكليات.")
+# 5. Footer بصمة المطور
+st.markdown("""
+    <div class='footer'>
+        تم تطويره بواسطة المبرمج أناس المعزوري - Anas El Mazouri © 2026
+    </div>
+    """, unsafe_allow_html=True)
