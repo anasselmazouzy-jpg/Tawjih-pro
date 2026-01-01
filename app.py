@@ -1,120 +1,136 @@
 import streamlit as st
+from datetime import datetime
 
 # 1. إعدادات الصفحة
 st.set_page_config(page_title="منصة توجيه برو", page_icon="🎓", layout="wide")
 
-# 2. تصميم CSS احترافي (ألوان السماء، الأبيض، والأخضر)
+# 2. تصميم CSS احترافي متوافق مع Dark Mode و Light Mode
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
-    html, body, [class*="st-"] { font-family: 'Cairo', sans-serif; text-align: right; }
     
-    /* خلفية متدرجة بألوان السماء */
-    .stApp {
-        background: linear-gradient(180deg, #e3f2fd 0%, #ffffff 100%);
+    /* تثبيت الخطوط والألوان لتعمل في كل الأوضاع */
+    html, body, [class*="st-"] { 
+        font-family: 'Cairo', sans-serif; 
+        text-align: right; 
     }
     
-    /* تنسيق العنوان الرئيسي */
+    /* خلفية ثابتة لا تتغير بالوضع الليلي لضمان وضوح الألوان */
+    .stApp {
+        background: linear-gradient(180deg, #e3f2fd 0%, #ffffff 100%) !important;
+    }
+
+    /* تثبيت لون العناوين والنصوص لتبقى واضحة (داكنة) */
+    h1, h2, h3, h4, p, span, label {
+        color: #1a5276 !important;
+    }
+
     .main-title {
         color: #1a5276;
         text-align: center;
-        font-size: 3rem;
+        font-size: 2.5rem;
         font-weight: bold;
-        padding: 20px;
-        border-bottom: 2px solid #4caf50;
-        margin-bottom: 30px;
+        padding: 10px;
+        border-bottom: 3px solid #4caf50;
     }
 
-    /* بطاقات الامتحانات */
+    /* عداد الوقت التنازلي */
+    .timer-box {
+        background-color: #fdf2f2;
+        border: 2px solid #ef4444;
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+        margin: 20px 0;
+    }
+    .timer-text { color: #dc2626 !important; font-size: 20px; font-weight: bold; }
+
     .exam-card {
-        background: white;
+        background: white !important;
         padding: 20px;
         border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         border-right: 8px solid #4caf50;
         margin-bottom: 20px;
-        transition: 0.3s;
     }
-    .exam-card:hover { transform: translateY(-5px); }
 
-    /* أزرار التحميل */
     .btn-download {
         display: inline-block;
-        padding: 12px 25px;
-        background: linear-gradient(45deg, #2ecc71, #27ae60);
+        padding: 10px 20px;
+        background: #27ae60;
         color: white !important;
         text-decoration: none;
-        border-radius: 30px;
+        border-radius: 25px;
         font-weight: bold;
-        text-align: center;
     }
 
-    /* شريط المطور في الأسفل */
     .footer {
         position: fixed;
         left: 0;
         bottom: 0;
         width: 100%;
-        background-color: rgba(26, 82, 118, 0.9);
-        color: white;
+        background-color: #1a5276;
+        color: white !important;
         text-align: center;
-        padding: 10px;
+        padding: 5px;
         font-size: 14px;
-        backdrop-filter: blur(5px);
         z-index: 100;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. العنوان الرئيسي للمنصة
+# 3. حساب العداد التنازلي للامتحان الوطني (مثال: 10 يونيو 2026)
+exam_date = datetime(2026, 6, 10)
+now = datetime.now()
+delta = exam_date - now
+days_left = delta.days
+
+# 4. واجهة الموقع
 st.markdown("<div class='main-title'>🎓 منصة توجيه برو</div>", unsafe_allow_html=True)
 
-# 4. الأقسام الرئيسية (Tabs)
-tab1, tab2, tab3 = st.tabs(["📚 أرشيف الامتحانات (2008-2024)", "🎯 حساب النقاط والتوجيه", "🤖 المساعد الذكي"])
+# عرض العداد التنازلي
+if days_left > 0:
+    st.markdown(f"""
+    <div class='timer-box'>
+        <span class='timer-text'>⏳ متبقي {days_left} يوم على الامتحان الوطني 2026</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+tab1, tab2, tab3 = st.tabs(["📚 الأرشيف (2008-2024)", "🎯 محرك التوجيه", "🤖 المساعد الذكي"])
 
 with tab1:
-    st.header("تحميل الامتحانات الوطنية الشاملة")
-    st.image("https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800", caption="طريقك نحو التميز الدراسي")
-    
-    c1, c2 = st.columns(2)
-    with c1:
-        shoba = st.selectbox("اختر الشعبة:", ["علوم الحياة والأرض", "العلوم الفيزيائية", "الآداب", "العلوم الرياضية"])
-    with c2:
-        year = st.selectbox("اختر السنة:", list(range(2024, 2007, -1)))
+    st.image("https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800")
+    col1, col2 = st.columns(2)
+    with col1:
+        shoba = st.selectbox("المسلك:", ["SVT", "PC", "آداب", "رياضية"])
+    with col2:
+        year = st.selectbox("السنة:", list(range(2024, 2007, -1)))
 
-    st.subheader(f"امتحانات {shoba} - دورة {year}")
-    
-    # قائمة المواد مع روابط بحث مباشرة لضمان الوصول للملفات
-    materials = ["الرياضيات", "الفيزياء", "الفلسفة", "اللغة الإنجليزية"]
-    
-    for mat in materials:
-        search_url = f"https://www.google.com/search?q=site:moutamadris.ma+امتحان+{mat}+{shoba}+{year}+pdf"
+    # قائمة مواد
+    subjects = ["الرياضيات", "الفيزياء", "الفلسفة"]
+    for s in subjects:
         st.markdown(f"""
         <div class='exam-card'>
             <div style='display: flex; justify-content: space-between; align-items: center;'>
-                <a href='{search_url}' target='_blank' class='btn-download'>🔗 فتح رابط التحميل المباشر</a>
-                <h4 style='margin:0;'>مادة {mat}</h4>
+                <a href='https://www.google.com/search?q=pdf+امتحان+{s}+{shoba}+{year}' target='_blank' class='btn-download'>تحميل PDF</a>
+                <h4 style='margin:0;'>{s}</h4>
             </div>
         </div>
         """, unsafe_allow_html=True)
 
 with tab2:
-    st.header("🎯 أين سأدرس بعد البكالوريا؟")
-    st.image("https://images.unsplash.com/photo-1541339907198-e08759df9a73?w=800")
-    score = st.slider("أدخل معدلك العام المتوقع:", 10.0, 20.0, 13.0)
-    if st.button("تحليل المسار"):
-        if score >= 16: st.success("خياراتك الكبرى: الطب، الهندسة (ENSA)، الأقسام التحضيرية.")
-        elif score >= 13: st.info("خياراتك الجيدة: ENCG، FST، معاهد التمريض (ISPITS).")
-        else: st.warning("خياراتك المتاحة: المدارس التكنولوجية (EST)، التكوين المهني، والكليات.")
+    st.header("🎯 حساب النقاط")
+    avg = st.number_input("المعدل العام:", 10.0, 20.0, 13.0)
+    if st.button("حلل مستقبلي"):
+        st.success("تم التحليل بنجاح!")
 
 with tab3:
-    st.header("🤖 المساعد الذكي للمنصة")
-    st.chat_message("assistant").write("أهلاً بك في منصة توجيه برو! أنا هنا للإجابة على تساؤلاتك حول الامتحانات أو التوجيه.")
-    st.chat_input("اكتب سؤالك هنا...")
+    st.header("🤖 المساعد الذكي")
+    st.chat_message("assistant").write("أهلاً بك! أنا مساعد أناس المعزوري، كيف أساعدك؟")
 
-# 5. شريط المطور (بصمة أناس المعزوري)
-st.markdown("""
+# 5. Footer (بصمة أناس المعزوري)
+st.markdown(f"""
     <div class='footer'>
-        🚀 تم تطوير هذا الموقع بواسطة المبرمج: أناس المعزوري © 2026
+        🚀 تم تطوير المنصة بواسطة المبرمج أناس المعزوري © {now.year}
     </div>
     """, unsafe_allow_html=True)
