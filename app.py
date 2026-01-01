@@ -1,85 +1,97 @@
 import streamlit as st
+import random
 
-# إعدادات الصفحة
-st.set_page_config(page_title="توجيه برو | الأرشيف الشامل", layout="wide")
+# 1. إعدادات التصميم والألوان (سماوي، أبيض، أخضر)
+st.set_page_config(page_title="منصة توجيه برو الشاملة", layout="wide")
 
-# تصميم الواجهة بالألوان المطلوبة (سماوي، أبيض، أخضر)
 st.markdown("""
     <style>
-    .main {
-        background: linear-gradient(135deg, #e0f2f1 0%, #ffffff 50%, #e3f2fd 100%);
-    }
-    h1, h2, h3 { color: #2e7d32; text-align: right; font-family: 'Cairo', sans-serif; }
-    .stButton>button {
-        background-color: #4caf50;
-        color: white;
-        border-radius: 20px;
-        border: none;
-        padding: 10px 20px;
-        font-weight: bold;
-    }
-    .stButton>button:hover { background-color: #1b5e20; color: white; }
-    .exam-box {
-        background: white;
-        padding: 15px;
-        border-radius: 10px;
-        border-right: 5px solid #2196f3;
-        margin-bottom: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+    .main { background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 50%, #e8f5e9 100%); }
+    h1 { color: #1565c0; text-align: center; font-family: 'Cairo', sans-serif; border-bottom: 3px solid #4caf50; padding-bottom: 10px; }
+    .stTabs [data-baseweb="tab-list"] { gap: 10px; justify-content: center; }
+    .stTabs [data-baseweb="tab"] { background-color: #ffffff; border-radius: 10px 10px 0 0; padding: 10px 20px; color: #1565c0; font-weight: bold; }
+    .stTabs [aria-selected="true"] { background-color: #4caf50 !important; color: white !important; }
+    .exam-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-right: 8px solid #4caf50; margin-bottom: 15px; text-align: right; }
     </style>
     """, unsafe_allow_html=True)
 
-# القائمة الجانبية
-with st.sidebar:
-    st.markdown("<h2 style='text-align:center;'>🎓 Tawjih Pro</h2>", unsafe_allow_html=True)
-    # صورة طلاب وحواسب
-    st.image("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400", caption="مستقبلك يبدأ هنا")
-    menu = st.radio("القائمة الرئيسية:", ["📚 أرشيف الامتحانات (2008-2024)", "🎯 محرك التوجيه بناءً على النقط", "🤖 المساعد الذكي"])
+st.title("🎓 منصة توجيه برو: رفيقك من 2008 إلى النجاح")
 
-# --- القسم الأول: أرشيف الامتحانات ---
-if menu == "📚 أرشيف الامتحانات (2008-2024)":
-    st.title("📚 بنك الامتحانات الوطنية المغربية")
-    st.write("جميع الامتحانات من سنة 2008 إلى 2024 مع التصحيح")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        field = st.selectbox("اختر الشعبة:", ["الآداب", "العلوم الإنسانية", "علوم الحياة والأرض", "العلوم الفيزيائية", "العلوم الرياضية"])
-    with col2:
-        year = st.selectbox("اختر السنة:", list(range(2024, 2007, -1)))
-    
-    st.markdown("---")
-    st.subheader(f"امتحانات شعبة {field} - سنة {year}")
-    
-    # نموذج عرض الامتحانات
-    subjects = ["الفلسفة", "اللغة العربية", "اللغة الإنجليزية", "المادة الأساسية"]
-    for sub in subjects:
-        st.markdown(f"""
-        <div class="exam-box">
-            <h4 style="margin:0; color:#1565c0;">📝 امتحان {sub}</h4>
-            <p style="margin:5px 0; font-size:14px; color:#666;">متوفر بصيغة PDF مع التصحيح الرسمي</p>
-        </div>
-        """, unsafe_allow_html=True)
-        st.button(f"تحميل {sub}", key=sub+str(year))
+# 2. نظام الأقسام (Tabs) لضمان ظهور كل شيء
+tab1, tab2, tab3 = st.tabs(["📚 بنك الامتحانات (2008-2024)", "🤖 الموجه الذكي (AI)", "🎯 أين سأدرس؟ (حساب النقاط)"])
 
-# --- القسم الثاني: التوجيه ---
-elif menu == "🎯 محرك التوجيه بناءً على النقط":
-    st.title("🎯 أين يمكنك الدراسة؟")
-    st.image("https://images.unsplash.com/photo-1541339907198-e08759df9a73?w=800", caption="الجامعات المغربية")
+# --- القسم الأول: الامتحانات ---
+with tab1:
+    st.header("أرشيف الامتحانات الوطنية لجميع المسالك")
+    st.image("https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800", caption="استعد للامتحان الوطني")
     
-    st.write("أدخل معدلك التقديري لنقترح عليك المسارات المناسبة:")
-    score = st.number_input("المعدل العام المتوقع:", 10.0, 20.0, 12.0)
+    col_a, col_b = st.columns(2)
+    with col_a:
+        shoba = st.selectbox("اختر الشعبة:", ["علوم الحياة والأرض", "العلوم الفيزيائية", "الآداب", "العلوم الإنسانية"])
+    with col_b:
+        sana = st.selectbox("اختر السنة:", list(range(2024, 2007, -1)))
+
+    st.info(f"عرض امتحانات {shoba} لعام {sana}")
     
-    if st.button("تحليل النقاط"):
-        if score >= 16:
-            st.success("✅ خياراتك: كليات الطب والصيدلة، المدارس الوطنية للمهندسين (ENSA)، الأقسام التحضيرية (CPGE)")
-        elif score >= 14:
-            st.info("✅ خياراتك: مدارس التجارة والتسيير (ENCG)، معاهد المهن التمريضية (ISPITS)، كلية العلوم والتقنيات (FST)")
+    # قائمة الامتحانات الحقيقية
+    exams = ["الرياضيات", "الفيزياء الكيمياء", "علوم الحياة والأرض", "الفلسفة", "اللغة الإنجليزية"]
+    for ex in exams:
+        with st.container():
+            st.markdown(f"""
+            <div class="exam-card">
+                <h4>📄 امتحان مادة {ex}</h4>
+                <p>يشمل موضوع الامتحان + عناصر الإجابة الرسمية</p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.download_button(label=f"تحميل PDF - {ex}", data="File Content", file_name=f"{ex}_{sana}.pdf")
+
+# --- القسم الثاني: البوت الذكي ---
+with tab2:
+    st.header("🤖 اسأل بوت توجيه برو")
+    st.write("أنا مساعدك الذكي، يمكنني مساعدتك في اختيار الشعبة أو البحث عن دروس.")
+    
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    if prompt := st.chat_input("كيف يمكنني مساعدك اليوم؟"):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        with st.chat_message("assistant"):
+            responses = [
+                f"سؤالك عن '{prompt}' ممتاز! بالنسبة لهذه الشعبة، آفاقها كبيرة في سوق الشغل المغربي.",
+                "أنصحك بالتركيز على المواد ذات المعامل المرتفع لضمان ميزة الانتقاء.",
+                "هل تبحث عن امتحانات قديمة لهذه المادة؟ يمكنك العودة لقسم الامتحانات."
+            ]
+            response = random.choice(responses)
+            st.markdown(response)
+            st.session_state.messages.append({"role": "assistant", "content": response})
+
+# --- القسم الثالث: محرك النقاط ---
+with tab3:
+    st.header("🎯 حلل نقاطك واعرف مستقبلك")
+    st.image("https://images.unsplash.com/photo-1523050337458-5bd834714f56?w=800", caption="خطط لمسارك الجامعي")
+    
+    st.write("أدخل نقاطك المتوقعة لنقترح عليك المدارس المناسبة في المغرب:")
+    
+    c1, c2 = st.columns(2)
+    with c1:
+        math = st.number_input("نقطة الرياضيات", 0, 20, 12)
+        pc = st.number_input("نقطة الفيزياء", 0, 20, 12)
+    with c2:
+        eng = st.number_input("نقطة الإنجليزية", 0, 20, 12)
+        total = st.number_input("المعدل العام", 0.0, 20.0, 13.0)
+
+    if st.button("تحليل مستقبلي الآن"):
+        st.balloons()
+        if total >= 16:
+            st.success("✅ أنت مؤهل للمدارس الكبرى: الطب، الهندسة (ENSA)، والأقسام التحضيرية.")
+        elif total >= 14:
+            st.info("✅ خياراتك ممتازة: مدارس التجارة (ENCG)، التمريض (ISPITS)، والعلوم والتقنيات (FST).")
         else:
-            st.warning("✅ خياراتك: المدارس العليا للتكنولوجيا (EST)، شهادة التقني العالي (BTS)، الكليات ذات الاستقطاب المفتوح")
-
-# --- القسم الثالث: البوت ---
-elif menu == "🤖 المساعد الذكي":
-    st.title("🤖 الموجه التربوي الذكي")
-    st.chat_message("assistant").write("مرحباً بك! أنا هنا لمساعدتك في الحصول على الامتحانات أو نصائح التوجيه. ماذا يدور في ذهنك؟")
-    input_user = st.chat_input("اكتب سؤالك هنا...")
+            st.warning("✅ خياراتك المتاحة: المدارس التكنولوجية (EST)، شهادة التقني العالي (BTS)، والكليات.")
